@@ -98,7 +98,7 @@ Let's look at the final function:
 
 ![](20.png)
 
-It seems to be a simple shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array. The arithmetic with `0x5f` and `0x7e` suggests it cycles around the printable characters.
+It seems to be a simple shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array. The arithmetic with `0x5f` and `0x7e` suggests it loops around the printable ASCII characters.
 
 
 ## Solution
@@ -115,7 +115,7 @@ We can't do much magic with /dev/urandom, but we don't have to - there are "only
 
 However, in the spirit of `From his foot, we can measure him`, some might find the following solution a bit more beautiful:
 
-Let us assume that the challenge author is not evil, and there really is a way to determine the entire sequence of matrices involved, from the final one given.
+Suppose that the challenge author is not devious, and there really is a way to determine the entire sequence of matrices involved, from the final one given.
 
 By definition, the way to go about reversing matrix multiplication is finding the inverses:
 
@@ -127,9 +127,9 @@ They do look similar. But which inverse is the correct one to use? Bruteforcing 
 
 ...they do not need to be bruteforced. This is what happens if we actually try to multiply the final triplet with every inverse (in a software capable of handling such large numbers, of course). Notice that the results are numerically identical, differing only by +/- signs. 
 
-We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is becaue no matter what sequence of matrices is applied on `{3,4,5}`, with none of them are we able to produce a negative number. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is going to give us false results. The second one is the real parent.
+We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is because no matter what sequence of matrices is applied on `{3,4,5}`, none of them can produce a negative number from it. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is going to give us false results. The second one is the real parent.
 
-If we wanted to, we could now backtrack every triplet by trying each of the inverses, selecting the one with the positive result, and from that determine exactly what sequence of matrices created it from the base `{3,4,5}` array. The easiest exploit, however, simply hardcodes one of the inverses, and makes sure to turn all values in the result positive after doing the multiplication:
+If we wanted to, we could now backtrack every triplet by trying each of the inverses, selecting the one with the positive result, and from that determine exactly what sequence of matrices generated it from the base `{3,4,5}` array. The easiest exploit, however, simply hardcodes one of the inverses, and makes sure to turn all values in the result positive after doing the multiplication:
 
 ![](23.png)
 
@@ -147,3 +147,4 @@ Those Pythagorean triplets look pretty damn beautiful, though, don't they?
 Link to the concept used: https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples
 
 #### flag = `dctf{x_p3de_herc00lem}`
+(yes, that is a quote by Pythagoras)
