@@ -41,11 +41,11 @@ Worth the shot.
 
 The real flag is in the executable running on the server, and we need to learn how to decrypt its output.
 
-We can see that main calls a new function with `0x19` and the flag as its parameters:
+We can see that `main` calls a new function with `0x19` and the flag as its parameters:
 
 ![](10.png)
 
-That's a lot of variables. However, we may notice that the variables in lines 27-29 actually form an array, which the decompiler hasn't recovered properly. Reading line 65 gives a clue to that, as
+That's a lot of variables. However, we may notice that the ones in lines 27-29 actually form an array, which the decompiler hasn't recovered properly. Reading line 65 gives a clue to that, as
 `local_88`, which holds the address of the first variable, is accessed as `local_88[1]` and `local_88[2]`, and reading the disassembly confirms these suspicions.
 
 Similarly, `local_58` seems to be the start of an array of 9 variables.
@@ -57,17 +57,17 @@ We can make the important part of the function more legible:
 All that happens is that one of `f0`, `f1` and `f2` is randomly selected and called with the larger array as parameter, followed by two more functions. (Ignore the fact
 that those seemingly have three arguments here, that is a decompiler artifact. It is later clear that they only take two.) From `main`, we know that this is repeated `25` times. After that, the encrypted flag is printed, followed by the smaller array.
 
-Comparing this to the output of the binary, it seems that `fun3` must be the one encrypting the flag, while `fun2` is probably making the inital {3,4,5} array larger.
+Comparing this to the output of the binary, it seems that `fun3` must be the one encrypting the flag, while `fun2` is probably making the inital `{3,4,5}` array larger.
 
 Let's analyze `f0, f1, f2` first:
 
 ![](12.png)
 
-It looks rather disgusting at first, but after retyping the function argument from `long` to the `long*` that we know it accepts, and beautifying a bit:
+It looks rather disgusting at first, but after some renaming, and retyping the function argument from `long` to the `long*` that we know it accepts:
 
 ![](13.png)
 
-Another look at the arithmetic involves suggests that our array is better interpreted as a 3x3 matrix. We see that `f0` makes sure the second column of the matrix is negative, and the other two are positive.
+Another look at the arithmetic involves suggests that our array is better interpreted as a 3x3 matrix. We see that `f0` makes sure the second column of the matrix turns negative, and the other two are positive.
 
 The other two functions perform similar tasks (with `arr9` renamed to `matrix` for clarity):
 
@@ -98,7 +98,7 @@ Let's look at the final function:
 
 ![](20.png)
 
-It seems to be a simple shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array.
+It seems to be a simple shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array. The arithmetic with `0x5f` and `0x7e` suggests it cycles around the printable characters.
 
 
 ## Solution
@@ -127,18 +127,23 @@ They do look similar. But which inverse is the correct one to use? Bruteforcing 
 
 ...they do not need to be bruteforced. This is what happens if we actually try to multiply the final triplet with every inverse (in a software capable of handling such large numbers, of course). Notice that the results are numerically identical, differing only by +/- signs. 
 
-We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is becaue no matter what sequence of matrices is applied on {3,4,5}, none of them are able to produce a negative number. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is guaranteed to give false results.
+We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is becaue no matter what sequence of matrices is applied on `{3,4,5}`, with none of them are we able to produce a negative number. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is going to give us false results.
 
-If we wanted to, we could now backtrack every triplet by trying each of the inverses, and determine exactly what sequence of matrices created it from the base {3,4,5} array. The easiest exploit, however, simply hardcodes one of the inverses, and makes sure to make all values in the result positive after doing the multiplication:
+If we wanted to, we could now backtrack every triplet by trying each of the inverses, selecting the one with the positive result, and from that determine exactly what sequence of matrices created it from the base `{3,4,5}` array. The easiest exploit, however, simply hardcodes one of the inverses, and makes sure to turn all values in the result positive after doing the multiplication:
 
 ![](23.png)
 
+
+The main idea is in the `driver` function. `multiplication` and `scalar` work the same as those in the decompilation, and `decrypt` is, obviously, doing the reverse of what the encrypting function is doing. 
+
 ![](24.png)
 
-The main idea is in the `driver` function. `multiplication` and `scalar` work the same as those in the decompilation, and `decrypt` is doing the reverse of what the encryption function is doing. (Maybe one could attempt to do this in a language that isn't C for a sexier solution, but oh well.)
+(Maybe one could attempt to do this in a language that isn't C for a sexier solution, but oh well.)
 
 ![](25.png)
 
 Those Pythagorean triplets look pretty damn beautiful, though, don't they?
 
-#### flag = `dctf{f1rst_step_t0wards_b3ll_l4bs}`
+[(Link to the concept used)] (https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples)
+
+#### flag = `dctf{x_p3de_herc00lem}`
