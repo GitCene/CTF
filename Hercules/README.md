@@ -144,6 +144,6 @@ The main idea is in the `driver` function. `multiplication` and `scalar` work th
 
 Those Pythagorean triplets look pretty damn beautiful, though, don't they?
 
-[(Link to the concept used)] (https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples)
+[Link to the concept used.] (https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples)
 
 #### flag = `dctf{x_p3de_herc00lem}`
