@@ -127,14 +127,14 @@ They do look similar. But which inverse is the correct one to use? Bruteforcing 
 
 ...they do not need to be bruteforced. This is what happens if we actually try to multiply the final triplet with every inverse (in a software capable of handling such large numbers, of course). Notice that the results are numerically identical, differing only by +/- signs. 
 
-We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is becaue no matter what sequence of matrices is applied on `{3,4,5}`, with none of them are we able to produce a negative number. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is going to give us false results.
+We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is becaue no matter what sequence of matrices is applied on `{3,4,5}`, with none of them are we able to produce a negative number. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is going to give us false results. The second one is the real parent.
 
 If we wanted to, we could now backtrack every triplet by trying each of the inverses, selecting the one with the positive result, and from that determine exactly what sequence of matrices created it from the base `{3,4,5}` array. The easiest exploit, however, simply hardcodes one of the inverses, and makes sure to turn all values in the result positive after doing the multiplication:
 
 ![](23.png)
 
 
-The main idea is in the `driver` function. `multiplication` and `scalar` work the same as those in the decompilation, and `decrypt` is, obviously, doing the reverse of what the encrypting function is doing. 
+The main idea is in the `driver` function. `multiplication` and `scalar` work the same as those in the decompilation, and `decrypt` is, obviously, doing the reverse of what the encrypting function is doing. These helper functions look like this:
 
 ![](24.png)
 
@@ -144,6 +144,6 @@ The main idea is in the `driver` function. `multiplication` and `scalar` work th
 
 Those Pythagorean triplets look pretty damn beautiful, though, don't they?
 
-[Link to the concept used.] (https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples)
+Link to the concept used: https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples
 
 #### flag = `dctf{x_p3de_herc00lem}`
