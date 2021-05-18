@@ -121,10 +121,20 @@ They do look similar. But which inverse is the correct one to use? Bruteforcing 
 
 ![](22.png)
 
-...they do not need to be bruteforced. This is what happens if we actually try to multiply the final triplet with every inverse (in a software capable of handling such large numbers, of course). Notice that the values are numerically identical, differing only by +/- signs. If we noticed that our array always had a positive value no matter what sequence of matrices it was multiplied by, we can now see that `f1` was the last matrix to have been used on this array, because it is the only one that returned a parent triplet with all elements positive.
+...they do not need to be bruteforced. This is what happens if we actually try to multiply the final triplet with every inverse (in a software capable of handling such large numbers, of course). Notice that the results are numerically identical, differing only by +/- signs. 
 
-![](14.png)
+We can now see that `f1` was the last matrix to have been used on this array, because its inverse is the only one that returned a parent triplet with all elements positive. This is becaue no matter what sequence of matrices is applied on {3,4,5}, none of them are able to produce a negative number. Therefore, the first and third result couldn't have been part of our sequence, and continuing to branch out from them is guaranteed to give false results.
 
+If we wanted to, we could now backtrack every triplet by trying each of the inverses, and determine exactly what sequence of matrices created it from the base {3,4,5} array. The easiest exploit, however, simply hardcodes one of the inverses, and makes sure to make all values in the result positive after doing the multiplication:
 
+![](23.png)
+
+![](24.png)
+
+The main idea is in the `driver` function. `multiplication` and `scalar` work the same as those in the decompilation, and `decrypt` is doing the reverse of what the encryption function is doing. (Maybe one could attempt to do this in a language that isn't C for a sexier solution, but oh well.)
+
+![](25.png)
+
+Those Pythagorean triplets look pretty damn beautiful, though, don't they?
 
 #### flag = `dctf{f1rst_step_t0wards_b3ll_l4bs}`
