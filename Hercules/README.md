@@ -5,7 +5,7 @@ A mathematical one.
 ![](1.png)
 
 
-## Solution
+## Analysis
 
 After connecting, the program exits almost immediately, only printing two lines…
 
@@ -99,6 +99,10 @@ Let's look at the final function:
 ![](20.png)
 
 It seems to be a simple shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array.
+
+
+## Solution
+
 
 Now, to recap how the entire program works:
 - We begin with our flag and the array {3,4,5}.
