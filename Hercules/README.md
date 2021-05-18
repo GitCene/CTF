@@ -84,7 +84,7 @@ Continuing to `fun2`:
 
 ![](17.png)
 
-The important part, after retyping the parameters:
+The important part, after retyping the parameters and beautifying:
 
 ![](18.png)
 
@@ -98,7 +98,7 @@ Let's look at the final function:
 
 ![](20.png)
 
-It seems to be a sort of shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array.
+It seems to be a simple shift cipher, shifting the value of every character in the flag by the value of the corresponding number in the array.
 
 Now, to recap how the entire program works:
 - We begin with our flag and the array {3,4,5}.
@@ -107,21 +107,21 @@ Now, to recap how the entire program works:
   - The array is used as a key to encrypt the flag.
 - The encrypted flag and final array are then given to us. 
 
-We don't mess with /dev/urandom, but we don't have to - there are "only" 3^25 different ways that these matrices may be selected, and that is bruteforcable.
+We can't do much magic with /dev/urandom, but we don't have to - there are "only" 3^25 different ways that these matrices may be selected, and that is bruteforcable.
 
 However, in the spirit of `From his foot, we can measure him`, some might find the following solution a bit more beautiful:
 
-Let us assume that the challenge author is not evil, and there really is a way to find the entire sequence of matrices involved, from the final one given.
+Let us assume that the challenge author is not evil, and there really is a way to determine the entire sequence of matrices involved, from the final one given.
 
 By definition, the way to go about reversing matrix multiplication is finding the inverses:
 
 ![](21.png)
 
-They do look similar. But which one to use? Bruteforcing all the inverses to find what sequence brings us back to {3,4,5} could take as much as 3^25 tries, unless... 
+They do look similar. But which inverse is the correct one to use? Bruteforcing all the inverses to find what sequence brings us back to {3,4,5} could again take as much as 3^25 tries, unless... 
 
 ![](22.png)
 
-...they do not need to be bruteforced.
+...they do not need to be bruteforced. This is what happens if we actually try to multiply the final triplet with every inverse (in a software capable of handling such large numbers, of course). Notice that the values are numerically identical, differing only by +/- signs. If we noticed that our array always had a positive value no matter what sequence of matrices it was multiplied by, we can now see that `f1` was the last matrix to have been used on this array, because it is the only one that returned a parent triplet with all elements positive.
 
 ![](14.png)
 
