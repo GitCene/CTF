@@ -67,7 +67,7 @@ It looks rather disgusting at first, but after retyping the function argument fr
 
 ![](13.png)
 
-A better look at the arithmetic involves suggests that our array is better interpreted as a 3x3 matrix. We see that `f0` makes sure the 2nd column of the matrix is negative, and the other two positive.
+Another look at the arithmetic involves suggests that our array is better interpreted as a 3x3 matrix. We see that `f0` makes sure the second column of the matrix is negative, and the other two are positive.
 
 The other two functions perform similar tasks (with `arr9` renamed to `matrix` for clarity):
 
@@ -75,8 +75,8 @@ The other two functions perform similar tasks (with `arr9` renamed to `matrix` f
 
 ![](15.png)
 
-`f1` is turning every column positive, while `f2` is setting only the first column to negative. 
-Therefore, what does the matrix look like after `f0`, `f1` and `f2` respectively:
+`f1` is turning every column positive, while `f2` is making only the first column negative. 
+Therefore, here are our matrices after `f0`, `f1` and `f2`, respectively:
 
 ![](16.png)
 
